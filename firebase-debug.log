@@ -1,0 +1,15 @@
+[debug] ----------------------------------------------------------------------
+[debug] Command:      /usr/local/bin/node /Users/jacky/Desktop/fb-hack/friendlypix/web/node_modules/.bin/firebase serve
+[debug] CLI Version:  3.0.2
+[debug] Platform:     darwin
+[debug] Node Version: v4.2.1
+[debug] Time:         Fri Jun 17 2016 23:22:52 GMT-0700 (PDT)
+[debug] ----------------------------------------------------------------------
+[debug] 
+[info] Starting Firebase development server...
+[info] 
+[info] Project Directory: /Users/jacky/Desktop/fb-hack/friendlypix/web
+[warn] ⚠  Port 5000 is not available. Trying another port...
+[info] Public Directory: public
+[info] 
+[info] Server listening at: http://localhost:5001
