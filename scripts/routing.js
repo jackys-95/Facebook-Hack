@@ -54,6 +54,12 @@ friendlyPix.Router = class {
         page('/user/:userId', pipe(loadUser, null, true), pipe(displayPage, {pageId: 'user-info'}));
         page('/about', pipe(clearFeed, null, true), pipe(displayPage, {pageId: 'about'}));
         page('/add', pipe(displayPage, {pageId: 'add', onlyAuthed: true}));
+                // Add new pages
+        // New skills teach
+        page("/teachSkills/", pipe(null, null, true), pipe(displayPage, {pageId: 'teach-skills'}));
+
+        // New skills learning
+        page("/learnSkills/", pipe(null, null, true), pipe(displayPage, {pageId: 'learn-skills'}));
         page('*', () => page('/'));
 
         // Start routing.

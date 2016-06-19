@@ -17,7 +17,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="description" content="Share your pics.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Friendly Pix</title>
+  <title>Mentors</title>
   <link rel="shortcut icon" href="/images/favicon.png">
 
   <!-- Disable tap highlight on IE -->
@@ -55,19 +55,105 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,500,300">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Amaranth:700">
   <link rel="stylesheet" href="/styles/main.css">
+  <link rel="stylesheet" href="/node_modules/fullcalendar/dist/fullcalendar.min.css">
 </head>
 <body>
+<script>
+  // This is called with the results from from FB.getLoginStatus().
+  function statusChangeCallback(response) {
+    console.log('statusChangeCallback');
+    console.log(response);
+    // The response object is returned with a status field that lets the
+    // app know the current login status of the person.
+    // Full docs on the response object can be found in the documentation
+    // for FB.getLoginStatus().
+    if (response.status === 'connected') {
+      // Logged into your app and Facebook.
+      testAPI();
+    } else if (response.status === 'not_authorized') {
+      // The person is logged into Facebook, but not your app.
+      document.getElementById('status').innerHTML = 'Please log ' +
+        'into this app.';
+    } else {
+      // The person is not logged into Facebook, so we're not sure if
+      // they are logged into this app or not.
+      document.getElementById('status').innerHTML = 'Please log ' +
+        'into Facebook.';
+    }
+  }
+
+  // This function is called when someone finishes with the Login
+  // Button.  See the onlogin handler attached to it in the sample
+  // code below.
+  function checkLoginState() {
+    FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    });
+  }
+
+  window.fbAsyncInit = function() {
+  FB.init({
+    appId      : '1556895894614338',
+    cookie     : true,  // enable cookies to allow the server to access 
+                        // the session
+    xfbml      : true,  // parse social plugins on this page
+    version    : 'v2.5' // use graph api version 2.5
+  });
+
+  // Now that we've initialized the JavaScript SDK, we call 
+  // FB.getLoginStatus().  This function gets the state of the
+  // person visiting this page and can return one of three states to
+  // the callback you provide.  They can be:
+  //
+  // 1. Logged into your app ('connected')
+  // 2. Logged into Facebook, but not your app ('not_authorized')
+  // 3. Not logged into Facebook and can't tell if they are logged into
+  //    your app or not.
+  //
+  // These three cases are handled in the callback function.
+
+  FB.getLoginStatus(function(response) {
+    statusChangeCallback(response);
+  });
+
+  };
+
+  // Load the SDK asynchronously
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+
+  // Here we run a very simple test of the Graph API after login is
+  // successful.  See statusChangeCallback() for when this call is made.
+  function testAPI() {
+    console.log('Welcome!  Fetching your information.... ');
+    FB.api('/me', function(response) {
+      console.log('Successful login for: ' + response.name);
+      document.getElementById('status').innerHTML =
+        'Thanks for logging in, ' + response.name + '!';
+    });
+  }
+</script>
 
 <!-- Theatre mode viewer -->
 <div class="fp-theatre"><img class="fp-fullpic"></div>
 
 <!-- Splash screen -->
 <section id="page-splash">
-  <h3 class="fp-logo"><i class="material-icons">photo</i>FB Hack</h3>
-  <div class="fp-caption">Mentoring Service</div>
+  <h3 class="fp-logo"><i class="material-icons">photo</i> Mentors</h3>
+  <div class="fp-caption"> The easiest way to learn</div>
   <div class="fp-signed-out-only fp-initially-hidden">
     <button class="fp-sign-in-button mdl-button--raised mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">account_circle</i> Sign in with Google</button>
     <a class="fp-skip" href="/feed">skip</a>
+    <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+    </fb:login-button>
+
+    <div id="status">
+    </div>
   </div>
 </section>
 
@@ -78,7 +164,7 @@
     <div class="mdl-layout__header-row fp-titlebar">
 
       <!-- Logo -->
-      <h3 class="fp-logo"><i class="material-icons">photo</i> Friendly Pix</h3>
+      <h3 class="fp-logo"><i class="material-icons">photo</i> Mentors</h3>
       <div class="mdl-layout-spacer"></div>
 
       <!-- Search bar -->
@@ -121,6 +207,15 @@
         <div class="mdl-tooltip mdl-tooltip--large" for="fp-menu-home">People you are following</div>
         <a href="/feed" id="fp-menu-feed" class="mdl-layout__tab mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">trending_up</i> Feed</a>
         <div class="mdl-tooltip mdl-tooltip--large" for="fp-menu-feed">All the Pics!</div>
+
+        <!-- Teach feature link --> 
+        <a href="/teachSkills" id="fp-menu-teach" class="mdl-layout__tab fp-signed-in-only mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">trending_up</i> Teach</a>
+        <div class="mdl-tooltip mdl-tooltip--large" for="fp-menu-teach">Teach someone!</div>
+
+        <!-- Learn feature link -->
+        <a href="/learnSkills" id="fp-menu-learn" class="mdl-layout__tab fp-signed-in-only mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">trending_up</i> Learn</a>
+        <div class="mdl-tooltip mdl-tooltip--large" for="fp-menu-learn">Learn from someone!</div>
+
         <input id="fp-mediacapture" type="file" accept="image/*;capture=camera">
         <button class="fp-signed-in-only mdl-button mdl-js-button mdl-button--fab mdl-cell--hide-tablet mdl-color--amber-400 mdl-shadow--4dp mdl-js-ripple-effect" id="add">
           <i class="material-icons">file_upload</i>
@@ -152,6 +247,125 @@
   </div>
 
   <main class="mdl-layout__content mdl-color--grey-100">
+
+    <section id="page-teach-skills" class="mdl-grid fp-content">
+        <form action="/" method="POST">
+<!-- List items with avatar and action -->
+        <style>
+        .demo-list-action {
+          width: 300px;
+        }
+        </style>
+        <h3> Please select all applicable skills </h2>
+        <div class="demo-list-action mdl-list">
+          <div class="mdl-list__item">
+            <span class="mdl-list__item-primary-content">
+              <i class="material-icons mdl-list__item-avatar">person</i>
+              <span>Basketball</span>
+            </span>
+                 <span class="mdl-list__item-secondary-action">
+                <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="list-switch-1">
+                  <input type="checkbox" id="list-switch-1" class="mdl-switch__input" checked 
+                  value="Basketball" name="skill"/>
+                </label>
+            </span>
+          </div>
+          <div class="mdl-list__item">
+            <span class="mdl-list__item-primary-content">
+              <i class="material-icons mdl-list__item-avatar">person</i>
+              <span>Hockey</span>
+            </span>
+                  <span class="mdl-list__item-secondary-action">
+                <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="list-switch-2">
+                  <input type="checkbox" id="list-switch-2" class="mdl-switch__input" checked 
+                  value="Hockey" name="skill"/>
+                </label>
+            </span>
+          </div>
+          <div class="mdl-list__item">
+            <span class="mdl-list__item-primary-content">
+              <i class="material-icons mdl-list__item-avatar">person</i>
+              <span>Soccer</span>
+            </span>
+            <span class="mdl-list__item-secondary-content">
+                    <span class="mdl-list__item-secondary-action">
+                <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="list-switch-3">
+                  <input type="checkbox" id="list-switch-3" class="mdl-switch__input" checked
+                  value="Soccer" name="skill" />
+                </label>
+            </span>
+          </span>
+          </div>
+        </div>
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"type="submit">Submit</button>
+        </form> 
+                <h3> Please list your availability. Here is your calendar just to remind you! </h3>
+        <form action="#">
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+          <input class="mdl-textfield__input" type="date" pattern="[A-Z,a-z]*" id="date" />
+          <label class="mdl-textfield__label" for="date">Date</label>
+          </div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+          <input class="mdl-textfield__input" type="time" pattern="[A-Z,a-z]*" id="time" />
+          <label class="mdl-textfield__label" for="time">Time </label>
+          </div>
+        </form>
+        <div id="calendar">
+        </div>
+    </section>
+
+    <section id="page-learn-skills" class="mdl-grid fp-content">
+        <form action="/" method="POST">
+<!-- List items with avatar and action -->
+        <style>
+        .demo-list-action {
+          width: 300px;
+        }
+        </style>
+        <h3> Please select what you want to learn: </h2>
+        <div class="demo-list-action mdl-list">
+          <div class="mdl-list__item">
+            <span class="mdl-list__item-primary-content">
+              <i class="material-icons mdl-list__item-avatar">person</i>
+              <span>Basketball</span>
+            </span>
+                 <span class="mdl-list__item-secondary-action">
+                <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="list-switch-4">
+                  <input type="checkbox" id="list-switch-4" class="mdl-switch__input" checked 
+                  value="Basketball" name="skill"/>
+                </label>
+            </span>
+          </div>
+          <div class="mdl-list__item">
+            <span class="mdl-list__item-primary-content">
+              <i class="material-icons mdl-list__item-avatar">person</i>
+              <span>Hockey</span>
+            </span>
+                  <span class="mdl-list__item-secondary-action">
+                <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="list-switch-5">
+                  <input type="checkbox" id="list-switch-5" class="mdl-switch__input" checked 
+                  value="Hockey" name="skill"/>
+                </label>
+            </span>
+          </div>
+          <div class="mdl-list__item">
+            <span class="mdl-list__item-primary-content">
+              <i class="material-icons mdl-list__item-avatar">person</i>
+              <span>Soccer</span>
+            </span>
+            <span class="mdl-list__item-secondary-content">
+                    <span class="mdl-list__item-secondary-action">
+                <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="list-switch-6">
+                  <input type="checkbox" id="list-switch-6" class="mdl-switch__input" checked
+                  value="Soccer" name="skill" />
+                </label>
+            </span>
+          </span>
+          </div>
+        </div>
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"type="submit">Submit</button>
+        </form>
+    </section>
 
     <!-- Show a feed of posts -->
     <section id="page-feed" class="mdl-grid fp-content" style="display: none;">
@@ -335,18 +549,21 @@
 
 <!-- Page.js -->
 <script src="/bower_components/page/page.js"></script>
-
 <!-- jQuery -->
 <script src="/bower_components/jquery/dist/jquery.min.js"></script>
 
 <!-- Latinize -->
 <script src="/bower_components/latinize/latinize.js"></script>
-
+<script src="/node_modules/moment/min/moment.min.js"</script>
+<script src="/node_modules/fullcalendar/dist/gcal.js"></script>
+<script src="/node_modules/fullcalendar/dist/fullcalendar.min.js"></script>
+<script src="/scripts/index.js"></script>
 <!-- SweetAlert -->
 <script src="/bower_components/sweetalert/dist/sweetalert.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/bower_components/sweetalert/dist/sweetalert.css">
 
 <!-- Firebase -->
+<!-- TODO(DEVELOPER): Paste the initialization snippet from: Firebase Console > Add Firebase to your web app. -->
 <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
 <script>
   // Initialize Firebase
@@ -358,6 +575,9 @@
   };
   firebase.initializeApp(config);
 </script>
+
+
+
 <!-- Friendly Pix ES5 scripts -->
 <script src="/lib/utils.js"></script>
 <script src="/lib/firebase.js"></script>
@@ -368,7 +588,7 @@
 <script src="/lib/post.js"></script>
 <script src="/lib/feed.js"></script>
 <script src="/lib/routing.js"></script>
-<script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
+
 
 <!-- Friendly Pix ES2015 scripts -->
 <!-- Uncomment and replace scripts above to serve ES2015 scripts directly -->
